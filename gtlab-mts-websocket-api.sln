@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtlab-mts-websocket-api", "gtlab-mts-websocket-api.vcxproj", "{0266CD6D-781A-4E65-A5F3-F8610EA0D57F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0266CD6D-781A-4E65-A5F3-F8610EA0D57F}.Debug|x64.ActiveCfg = Debug|x64
+		{0266CD6D-781A-4E65-A5F3-F8610EA0D57F}.Debug|x64.Build.0 = Debug|x64
+		{0266CD6D-781A-4E65-A5F3-F8610EA0D57F}.Release|x64.ActiveCfg = Release|x64
+		{0266CD6D-781A-4E65-A5F3-F8610EA0D57F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA40CEA2-210F-4374-92E3-381D54ACE983}
+	EndGlobalSection
+EndGlobal
