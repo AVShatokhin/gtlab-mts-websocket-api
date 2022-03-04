@@ -1,8 +1,12 @@
 #pragma once
 
 #include <QObject>
+#include "types.h"
 
 #include "parser.h"
+#include "PingRequest.h"
+#include "describeChannels.h"
+
 
 class session : public QObject
 {
@@ -11,5 +15,11 @@ class session : public QObject
 public:
 	session(parser *);
 	~session();
+private:
+	request * _router(command);
+	parser * _parser;	
+	QMap<quint8, request*> _requests;
+	bool _checkRequestId(command);
+	void _addRequest(command, request *);
 
 };

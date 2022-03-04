@@ -5,17 +5,26 @@
     <ClCompile Include="ws_server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="request.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="PingRequest.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
     <ClCompile Include="connection.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\session</Filter>
     </ClCompile>
     <ClCompile Include="parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="controller.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\session</Filter>
     </ClCompile>
     <ClCompile Include="session.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\session</Filter>
+    </ClCompile>
+    <ClCompile Include="render.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="describeChannels.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -29,22 +38,48 @@
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
       <ParseFiles>true</ParseFiles>
     </Filter>
+    <Filter Include="Header Files\requestSolvers">
+      <UniqueIdentifier>{1dba4ce6-3791-4e67-a995-7ad6e02cd2fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\requestSolvers">
+      <UniqueIdentifier>{dd1d495f-faf2-46d3-b187-4698b10b63b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\session">
+      <UniqueIdentifier>{ffddb603-47e1-4a0b-b795-ac2dbf75132f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\session">
+      <UniqueIdentifier>{2b05c343-3b1c-4c83-a558-4ced5715acdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ws_server.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="request.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="PingRequest.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
     <QtMoc Include="connection.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\session</Filter>
     </QtMoc>
     <QtMoc Include="parser.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="controller.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\session</Filter>
     </QtMoc>
     <QtMoc Include="session.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\session</Filter>
     </QtMoc>
+    <QtMoc Include="render.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="describeChannels.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

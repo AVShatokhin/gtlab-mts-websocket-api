@@ -85,10 +85,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="controller.cpp" />
+    <ClCompile Include="describeChannels.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="connection.cpp" />
+    <ClCompile Include="PingRequest.cpp" />
+    <ClCompile Include="render.cpp" />
+    <ClCompile Include="request.cpp" />
     <ClCompile Include="session.cpp" />
     <ClCompile Include="ws_server.cpp" />
   </ItemGroup>
@@ -102,10 +105,14 @@
     <QtMoc Include="parser.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="controller.h" />
+    <QtMoc Include="session.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="session.h" />
+    <QtMoc Include="describeChannels.h" />
+    <QtMoc Include="render.h" />
+    <QtMoc Include="PingRequest.h" />
+    <QtMoc Include="request.h" />
+    <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

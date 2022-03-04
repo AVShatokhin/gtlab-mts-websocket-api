@@ -1,19 +1,80 @@
 #include "session.h"
 
 session::session(parser * par)
-	: QObject()
+	: QObject(), _parser(par)
 {
-	QObject::connect(par, &parser::newCommand, [=] {
-		qDebug() << "New command";
-		par->send();
+	_requests.clear();
+
+	QObject::connect(par, &parser::newCommand, [=] (command cmd) {			
+			if (_checkRequestId(cmd)) {				
+				_addRequest(cmd, _router(cmd));
+			}
+			else {
+				_parser->getCurrentConnection()->sendTextMessage(render::ERROR_badRequest_ID(cmd.id));				
+			}
 		});
 
 	QObject::connect(par, &parser::disconnected, [=] {
-		qDebug() << "Disconnected";
+		qDebug() << "Session closed";
 		deleteLater();
 		});
 }
 
 session::~session()
 {
+}
+
+request * session::_router(command cmd)
+{
+	if (cmd.methodId == "ping") {
+		return (request *)(new PingRequest(cmd, _parser->getCurrentConnection()));
+	}
+	else if (cmd.methodId == "signalRecording.describeChannels") {
+		// получение информации об аналоговых каналах АЦП
+		return (request *)(new describeChannels(cmd, _parser->getCurrentConnection()));
+	}
+	else if (cmd.methodId == "signalRecording.start") {
+		// начало записи сигнала с аналогового датчика
+
+	} 
+	else if (cmd.methodId == "signalRecording.stop") {
+		// сигнал об окончании записи
+
+	}
+	else if (cmd.methodId == "plotter.start") {
+		// инициализируем сессию рисования
+
+	}
+	else if (cmd.methodId == "plotter.stop") {
+		// закрываем сессию рисования
+
+	}
+	else if (cmd.methodId == "plotter.plot") {
+		// закрываем сессию рисования
+
+	}
+	else if (cmd.methodId == "plotter.selectStationaryIntervals") {
+		// выбираем стационарные интервалы в записанном сигнале
+
+	}
+	else if (cmd.methodId == "signalTransform") {
+		// выполняем преобразование файла с сигналом
+
+	}
+	
+	return new request(cmd, _parser->getCurrentConnection());	
+}
+
+bool session::_checkRequestId(command cmd)
+{
+	return !_requests.contains(cmd.id);
+}
+
+void session::_addRequest(command cmd, request * req)
+{
+	_requests.insert(cmd.id, req);
+	QObject::connect(req, &request::requestCompleted, [=] {
+		_requests.remove(cmd.id);		
+	});
+	req->start();
 }

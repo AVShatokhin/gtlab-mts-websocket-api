@@ -10,6 +10,7 @@
 *.dll
 *.dylib
 x64/
+.vs/
 
 # Qt-es
 object_script.*.Release

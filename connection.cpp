@@ -3,7 +3,8 @@
 connection::connection(QWebSocket * webSocket)
 	: QObject(), _connection(webSocket)
 {
-	QObject::connect(_connection, &QWebSocket::disconnected, [=] { 
+	QObject::connect(_connection, &QWebSocket::disconnected, [=] {
+		qDebug() << "Connection closed";
 		emit disconnected(); 
 		deleteLater();
 	});
