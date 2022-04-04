@@ -35,6 +35,13 @@ void parser::parse(QString message)
 		if (__object.contains("id") && __object.contains("methodId")) {
 			__newCommand.id = __object.value("id").toInt();
 			__newCommand.methodId = __object.value("methodId").toString();
+
+			QJsonObject __properties = __object.value("properties").toObject();
+			if (!__properties.isEmpty()) {
+				parse_signalRecordingStart(&__newCommand, &__properties);
+				parse_signalRecordingStop(&__newCommand, &__properties);
+			}
+
 			emit newCommand(__newCommand);
 			return;
 		}
@@ -45,4 +52,38 @@ void parser::parse(QString message)
 	else {
 		_currentConnection->sendTextMessage(render::ERROR_badRequestFormat());
 	}	
+}
+
+void parser::parse_signalRecordingStart(command* newCommand, QJsonObject* properties)
+{
+	newCommand->recordingId = properties->value("recordingId").toInt(0);
+	newCommand->measurementsFrame = properties->value("measurementsFrame").toInt(0);
+	newCommand->frameIntervalMillis = properties->value("frameIntervalMillis").toInt(0);
+	if (properties->value("channels").isArray()) {
+		QJsonArray __channels = properties->value("channels").toArray();
+		for (auto i = __channels.begin(); i != __channels.end(); i++) {
+			if (i->isObject()) {
+				channelRecord __channel;
+				QJsonObject __channelItem = i->toObject();
+				__channel.channelId = __channelItem.value("channelId").toInt();
+				__channel.gainMultiplier = __channelItem.value("gainMultiplier").toDouble();
+				if (__channelItem.value("recordings").isArray()) {
+					QJsonArray __recordings = __channelItem.value("recordings").toArray();
+					for (auto j = __recordings.begin(); j != __recordings.end(); j++) {
+						recording __recording;
+						QJsonObject __recordingItem = j->toObject();
+						__recording.recordingPath = __recordingItem.value("recordingPath").toString();
+						__recording.transformId = __recordingItem.value("transformId").toInt();
+						__channel.recordings.append(__recording);
+					}
+				}
+				newCommand->channels.append(__channel);
+			}
+		}
+	}
+}
+
+void parser::parse_signalRecordingStop(command* newCommand, QJsonObject* properties)
+{
+	newCommand->recordingId = properties->value("recordingId").toInt(0);
 }

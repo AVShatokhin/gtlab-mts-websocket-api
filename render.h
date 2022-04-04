@@ -16,7 +16,8 @@ public:
 	~render();
 
 	static QString Ping(quint8 id);
-	static QString describeChannels(quint8 id, QList<channel>*);
+	static QString describeChannels(quint8 id, QList<channelInfo>*);
+	static QString signalRecording_stop(quint8 id, int errorCode);
 
 	// Ошибки
 	static QString ERROR_badRequest_ID(quint8 id);

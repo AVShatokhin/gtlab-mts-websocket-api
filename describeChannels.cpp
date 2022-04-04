@@ -11,9 +11,9 @@ describeChannels::~describeChannels()
 
 void describeChannels::start()
 {
-	QList<channel> __channels;
+	QList<channelInfo> __channels;
 
-	channel __c;
+	channelInfo __c;
 
 	__c.channelId = 1;
 	__c.displayName = "1";

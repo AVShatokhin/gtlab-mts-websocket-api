@@ -6,6 +6,8 @@
 #include "parser.h"
 #include "PingRequest.h"
 #include "describeChannels.h"
+#include "signalRecording_start.h"
+#include "signalRecording_stop.h"
 
 
 class session : public QObject
@@ -21,5 +23,4 @@ private:
 	QMap<quint8, request*> _requests;
 	bool _checkRequestId(command);
 	void _addRequest(command, request *);
-
 };

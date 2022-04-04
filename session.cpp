@@ -4,6 +4,7 @@ session::session(parser * par)
 	: QObject(), _parser(par)
 {
 	_requests.clear();
+	//_signalRecords.clear();
 
 	QObject::connect(par, &parser::newCommand, [=] (command cmd) {			
 			if (_checkRequestId(cmd)) {				
@@ -35,11 +36,12 @@ request * session::_router(command cmd)
 	}
 	else if (cmd.methodId == "signalRecording.start") {
 		// начало записи сигнала с аналогового датчика
-
+		signalRecording_start* __signalRecording_start = new signalRecording_start(cmd, _parser->getCurrentConnection());
+		return (request*)(__signalRecording_start);
 	} 
 	else if (cmd.methodId == "signalRecording.stop") {
+		return (request*)(new signalRecording_stop(cmd, _parser->getCurrentConnection(), &_requests));		
 		// сигнал об окончании записи
-
 	}
 	else if (cmd.methodId == "plotter.start") {
 		// инициализируем сессию рисования

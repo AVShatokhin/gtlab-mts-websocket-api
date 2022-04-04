@@ -93,6 +93,8 @@
     <ClCompile Include="render.cpp" />
     <ClCompile Include="request.cpp" />
     <ClCompile Include="session.cpp" />
+    <ClCompile Include="signalRecording_start.cpp" />
+    <ClCompile Include="signalRecording_stop.cpp" />
     <ClCompile Include="ws_server.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +114,8 @@
     <QtMoc Include="render.h" />
     <QtMoc Include="PingRequest.h" />
     <QtMoc Include="request.h" />
+    <QtMoc Include="signalRecording_start.h" />
+    <QtMoc Include="signalRecording_stop.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

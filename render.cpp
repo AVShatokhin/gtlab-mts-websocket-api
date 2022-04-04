@@ -21,7 +21,7 @@ QString render::Ping(quint8 id)
 	return __response.toJson();
 }
 
-QString render::describeChannels(quint8 id, QList<channel> * channels)
+QString render::describeChannels(quint8 id, QList<channelInfo> * channels)
 {
 
 	QJsonArray __channels;
@@ -41,6 +41,31 @@ QString render::describeChannels(quint8 id, QList<channel> * channels)
 
 	return __response.toJson();
 }
+
+QString render::signalRecording_stop(quint8 id, int errorCode)
+{
+	QJsonDocument __response = QJsonDocument();
+
+	if (errorCode > 0) {
+		QJsonObject __error = { { "code", errorCode} };
+
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()},
+			{"error", __error}
+			});
+
+	} else {
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()}
+			});
+	}
+
+	return __response.toJson();
+}
+
+
 
 QString render::ERROR_badRequest_ID(quint8 id)
 {

@@ -16,6 +16,9 @@ public:
 	command _cmd;
 	connection* _connection;
 
+	command getCmd() { return _cmd; }
+	virtual QVariant interrupt(QVariant);
+
 public slots:
 	virtual void start();
 	virtual void stop();

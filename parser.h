@@ -25,6 +25,9 @@ public:
 
 private: 
 	void parse(QString);
+	void parse_signalRecordingStart(command *, QJsonObject *);
+	void parse_signalRecordingStop(command*, QJsonObject*);
+
 	connection* _currentConnection;
 
 signals:

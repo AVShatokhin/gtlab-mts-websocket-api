@@ -10,6 +10,11 @@ request::~request()
 {
 }
 
+QVariant request::interrupt(QVariant)
+{
+	return QVariant();
+}
+
 void request::stop()
 {
 	emit requestCompleted();
@@ -20,7 +25,7 @@ void request::start()
 {
 	// стандартный start() сразу вызывает stop(), 
 	// поэтому старт надо переопрелять полностью без переиспользования базовой реализации
-	// вызов базвого класса request генерирует ошибку unknownMethod
+	// вызов базового класса request генерирует ошибку unknownMethod
 	_connection->sendTextMessage(render::ERROR_unknownMethod(_cmd.id, _cmd.methodId));
 	stop();	
 }

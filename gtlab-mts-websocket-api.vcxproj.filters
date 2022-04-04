@@ -26,6 +26,12 @@
     <ClCompile Include="describeChannels.cpp">
       <Filter>Source Files\requestSolvers</Filter>
     </ClCompile>
+    <ClCompile Include="signalRecording_start.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="signalRecording_stop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -75,6 +81,12 @@
     </QtMoc>
     <QtMoc Include="describeChannels.h">
       <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="signalRecording_start.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="signalRecording_stop.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
