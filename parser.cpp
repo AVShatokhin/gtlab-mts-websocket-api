@@ -40,6 +40,8 @@ void parser::parse(QString message)
 			if (!__properties.isEmpty()) {
 				parse_signalRecordingStart(&__newCommand, &__properties);
 				parse_signalRecordingStop(&__newCommand, &__properties);
+				parse_plotterStart(&__newCommand, &__properties);
+				parse_signalTransform(&__newCommand, &__properties);
 			}
 
 			emit newCommand(__newCommand);
@@ -87,3 +89,19 @@ void parser::parse_signalRecordingStop(command* newCommand, QJsonObject* propert
 {
 	newCommand->recordingId = properties->value("recordingId").toInt(0);
 }
+
+void parser::parse_plotterStart(command* newCommand, QJsonObject* properties)
+{
+	newCommand->plotterId = properties->value("plotterId").toInt(0);
+	newCommand->rangeStart = properties->value("rangeStart").toInt(0);
+	newCommand->rangeStop = properties->value("rangeStop").toInt(0);
+}
+
+void parser::parse_signalTransform(command* newCommand, QJsonObject* properties)
+{
+	newCommand->transformId = properties->value("transformId").toString("");
+	newCommand->sourcePath = properties->value("sourcePath").toString("");
+	newCommand->destinationPath = properties->value("destinationPath").toString("");
+}
+
+

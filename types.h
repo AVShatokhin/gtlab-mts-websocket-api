@@ -1,5 +1,6 @@
 #pragma once
 #include <QObject>
+#include "errorCodes.h"
 
 struct recording {
 	quint8 transformId;
@@ -22,6 +23,17 @@ struct command {
 	quint16 measurementsFrame;
 	quint16 frameIntervalMillis;
 	QList<channelRecord> channels;
+
+	// plotter.start
+	quint8 plotterId;
+	quint32 rangeStart;
+	quint32 rangeStop;
+
+	// signal transform
+	QString transformId;
+	QString sourcePath;
+	QString destinationPath;
+
 };
 
 struct channelInfo {

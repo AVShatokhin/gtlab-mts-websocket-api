@@ -26,7 +26,7 @@ void signalRecording_stop::start()
 
 	if (!__found) {
 		// Ќе найден или уже остановлен, что как бы одно и то же
-		sendResponse(render::signalRecording_stop(_cmd.id, 2001));
+		sendResponse(render::signalRecording_stop(_cmd.id, RECORDER_NOT_FOUND));
 	}
 
 	stop();

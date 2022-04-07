@@ -1,7 +1,6 @@
 #pragma once
 
 #include "request.h"
-#include "types.h"
 
 #include "render.h"
 

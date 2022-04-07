@@ -8,7 +8,11 @@
 #include "describeChannels.h"
 #include "signalRecording_start.h"
 #include "signalRecording_stop.h"
-
+#include "plotter_start.h"
+#include "plotter_stop.h"
+#include "plotter_plot.h"
+#include "plotter_selectStationaryIntervals.h"
+#include "signalTransform.h"
 
 class session : public QObject
 {

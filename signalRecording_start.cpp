@@ -11,6 +11,8 @@ signalRecording_start::~signalRecording_start()
 
 void signalRecording_start::start()
 {
+	// надо проверять на существование recorderId ?
+
 	QTimer* __timer = new QTimer(this);
 	__timer->setInterval(1000);
 	__timer->setTimerType(Qt::PreciseTimer);

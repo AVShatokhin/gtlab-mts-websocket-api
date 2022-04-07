@@ -17,7 +17,6 @@ public:
 	connection* _connection;
 
 	command getCmd() { return _cmd; }
-	virtual QVariant interrupt(QVariant);
 
 public slots:
 	virtual void start();

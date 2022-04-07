@@ -90,11 +90,16 @@
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="connection.cpp" />
     <ClCompile Include="PingRequest.cpp" />
+    <ClCompile Include="plotter_plot.cpp" />
+    <ClCompile Include="plotter_selectStationaryIntervals.cpp" />
+    <ClCompile Include="plotter_start.cpp" />
+    <ClCompile Include="plotter_stop.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="request.cpp" />
     <ClCompile Include="session.cpp" />
     <ClCompile Include="signalRecording_start.cpp" />
     <ClCompile Include="signalRecording_stop.cpp" />
+    <ClCompile Include="signalTransform.cpp" />
     <ClCompile Include="ws_server.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +121,12 @@
     <QtMoc Include="request.h" />
     <QtMoc Include="signalRecording_start.h" />
     <QtMoc Include="signalRecording_stop.h" />
+    <QtMoc Include="plotter_start.h" />
+    <QtMoc Include="plotter_stop.h" />
+    <ClInclude Include="errorCodes.h" />
+    <QtMoc Include="plotter_plot.h" />
+    <QtMoc Include="plotter_selectStationaryIntervals.h" />
+    <QtMoc Include="signalTransform.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

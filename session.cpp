@@ -3,8 +3,7 @@
 session::session(parser * par)
 	: QObject(), _parser(par)
 {
-	_requests.clear();
-	//_signalRecords.clear();
+	_requests.clear();	
 
 	QObject::connect(par, &parser::newCommand, [=] (command cmd) {			
 			if (_checkRequestId(cmd)) {				
@@ -17,12 +16,18 @@ session::session(parser * par)
 
 	QObject::connect(par, &parser::disconnected, [=] {
 		qDebug() << "Session closed";
+
+		while (!_requests.empty()) {
+			_requests.begin().value()->stop();
+		}
+
 		deleteLater();
 		});
 }
 
 session::~session()
 {
+	
 }
 
 request * session::_router(command cmd)
@@ -35,33 +40,32 @@ request * session::_router(command cmd)
 		return (request *)(new describeChannels(cmd, _parser->getCurrentConnection()));
 	}
 	else if (cmd.methodId == "signalRecording.start") {
-		// начало записи сигнала с аналогового датчика
-		signalRecording_start* __signalRecording_start = new signalRecording_start(cmd, _parser->getCurrentConnection());
-		return (request*)(__signalRecording_start);
+		// начало записи сигнала с аналогового датчика		
+		return (request*)(new signalRecording_start(cmd, _parser->getCurrentConnection()));
 	} 
 	else if (cmd.methodId == "signalRecording.stop") {
-		return (request*)(new signalRecording_stop(cmd, _parser->getCurrentConnection(), &_requests));		
 		// сигнал об окончании записи
+		return (request*)(new signalRecording_stop(cmd, _parser->getCurrentConnection(), &_requests));				
 	}
 	else if (cmd.methodId == "plotter.start") {
 		// инициализируем сессию рисования
-
+		return (request*)(new plotter_start(cmd, _parser->getCurrentConnection()));
 	}
 	else if (cmd.methodId == "plotter.stop") {
 		// закрываем сессию рисования
-
+		return (request*)(new plotter_stop(cmd, _parser->getCurrentConnection(), &_requests));		
 	}
 	else if (cmd.methodId == "plotter.plot") {
 		// закрываем сессию рисования
-
+		return (request*)(new plotter_plot(cmd, _parser->getCurrentConnection(), &_requests));
 	}
 	else if (cmd.methodId == "plotter.selectStationaryIntervals") {
 		// выбираем стационарные интервалы в записанном сигнале
-
+		return (request*)(new plotter_selectStationaryIntervals(cmd, _parser->getCurrentConnection(), &_requests));
 	}
 	else if (cmd.methodId == "signalTransform") {
 		// выполняем преобразование файла с сигналом
-
+		return (request*)(new signalTransform(cmd, _parser->getCurrentConnection()));
 	}
 	
 	return new request(cmd, _parser->getCurrentConnection());	

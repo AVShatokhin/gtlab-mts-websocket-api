@@ -65,6 +65,102 @@ QString render::signalRecording_stop(quint8 id, int errorCode)
 	return __response.toJson();
 }
 
+QString render::plotter_stop(quint8 id, int errorCode)
+{
+	QJsonDocument __response = QJsonDocument();
+
+	if (errorCode > 0) {
+		QJsonObject __error = { { "code", errorCode} };
+
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()},
+			{"error", __error}
+			});
+
+	}
+	else {
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()}
+			});
+	}
+
+	return __response.toJson();
+}
+
+QString render::plotter_plot(quint8 id, int errorCode)
+{
+	QJsonDocument __response = QJsonDocument();
+
+	if (errorCode > 0) {
+		QJsonObject __error = { { "code", errorCode} };
+
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()},
+			{"error", __error}
+			});
+
+	}
+	else {
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()}
+			});
+	}
+
+	return __response.toJson();
+}
+
+QString render::plotter_selectStationaryIntervals(quint8 id, int errorCode)
+{
+	QJsonDocument __response = QJsonDocument();
+
+	if (errorCode > 0) {
+		QJsonObject __error = { { "code", errorCode} };
+
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()},
+			{"error", __error}
+			});
+
+	}
+	else {
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()}
+			});
+	}
+
+	return __response.toJson();
+}
+
+QString render::signalTransform(quint8 id, int errorCode)
+{
+	QJsonDocument __response = QJsonDocument();
+
+	if (errorCode > 0) {
+		QJsonObject __error = { { "code", errorCode} };
+
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()},
+			{"error", __error}
+			});
+
+	}
+	else {
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()}
+			});
+	}
+
+	return __response.toJson();
+}
+
 
 
 QString render::ERROR_badRequest_ID(quint8 id)
@@ -76,7 +172,7 @@ QString render::ERROR_badRequest_ID(quint8 id)
 
 	QJsonObject __error;
 
-	__error.insert("code", QJsonValue(1000));
+	__error.insert("code", QJsonValue(DUPLICATE_REQUEST_ID));
 	__error.insert("extra", __extra);
 
 	QJsonDocument __response = QJsonDocument();
@@ -98,7 +194,7 @@ QString render::ERROR_unknownMethod(quint8 id, QString methodId)
 
 	QJsonObject __error;
 
-	__error.insert("code", QJsonValue(1000));
+	__error.insert("code", QJsonValue(UNKNOWN_METHOD));
 	__error.insert("extra", __extra);
 
 	QJsonDocument __response = QJsonDocument();
@@ -120,7 +216,7 @@ QString render::ERROR_notEnoughParameters()
 	QJsonObject __error;
 
 	__error.insert("extra", __extra);
-	__error.insert("code", QJsonValue(1000));
+	__error.insert("code", QJsonValue(NOT_ENOUGH_PARAMETERS));
 
 	QJsonDocument __response = QJsonDocument();
 
@@ -141,7 +237,7 @@ QString render::ERROR_badRequestFormat()
 	QJsonObject __error;
 
 	__error.insert("extra", __extra);
-	__error.insert("code", QJsonValue(1000));
+	__error.insert("code", QJsonValue(BAD_REQUEST_FORMAT));
 
 	QJsonDocument __response = QJsonDocument();
 
@@ -161,7 +257,7 @@ QString render::ERROR_JSONParseFailed(QString error)
 	QJsonObject __error;
 
 	__error.insert("extra", __extra);
-	__error.insert("code", QJsonValue(1000));
+	__error.insert("code", QJsonValue(PARSER_FAILED));
 
 	QJsonDocument __response = QJsonDocument();
 

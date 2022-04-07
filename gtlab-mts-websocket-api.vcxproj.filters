@@ -30,7 +30,22 @@
       <Filter>Source Files\requestSolvers</Filter>
     </ClCompile>
     <ClCompile Include="signalRecording_stop.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="plotter_start.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="plotter_plot.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="plotter_selectStationaryIntervals.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="plotter_stop.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="signalTransform.cpp">
+      <Filter>Source Files\requestSolvers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,11 +101,29 @@
       <Filter>Header Files\requestSolvers</Filter>
     </QtMoc>
     <QtMoc Include="signalRecording_stop.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="plotter_start.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="plotter_plot.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="plotter_selectStationaryIntervals.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="plotter_stop.h">
+      <Filter>Header Files\requestSolvers</Filter>
+    </QtMoc>
+    <QtMoc Include="signalTransform.h">
+      <Filter>Header Files\requestSolvers</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="errorCodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,13 +10,8 @@ request::~request()
 {
 }
 
-QVariant request::interrupt(QVariant)
-{
-	return QVariant();
-}
-
 void request::stop()
-{
+{	
 	emit requestCompleted();
 	deleteLater();
 }
