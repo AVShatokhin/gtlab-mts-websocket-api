@@ -5,7 +5,7 @@
 #include <QJsonObject>
 
 #include "connection.h"
-#include "types.h"
+#include "const.h"
 
 #include "render.h"
 

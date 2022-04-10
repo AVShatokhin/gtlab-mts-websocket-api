@@ -11,6 +11,8 @@ describeChannels::~describeChannels()
 
 void describeChannels::start()
 {
+	
+
 	QList<channelInfo> __channels;
 
 	channelInfo __c;
@@ -31,5 +33,3 @@ void describeChannels::start()
 
 	stop();
 }
-
-

@@ -5,9 +5,6 @@
     <ClCompile Include="ws_server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="request.cpp">
-      <Filter>Source Files\requestSolvers</Filter>
-    </ClCompile>
     <ClCompile Include="PingRequest.cpp">
       <Filter>Source Files\requestSolvers</Filter>
     </ClCompile>
@@ -19,9 +16,6 @@
     </ClCompile>
     <ClCompile Include="session.cpp">
       <Filter>Source Files\session</Filter>
-    </ClCompile>
-    <ClCompile Include="render.cpp">
-      <Filter>Source Files\requestSolvers</Filter>
     </ClCompile>
     <ClCompile Include="describeChannels.cpp">
       <Filter>Source Files\requestSolvers</Filter>
@@ -47,6 +41,18 @@
     <ClCompile Include="signalTransform.cpp">
       <Filter>Source Files\requestSolvers</Filter>
     </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adc.cpp">
+      <Filter>Source Files\hw</Filter>
+    </ClCompile>
+    <ClCompile Include="render.cpp">
+      <Filter>Source Files\session</Filter>
+    </ClCompile>
+    <ClCompile Include="request.cpp">
+      <Filter>Source Files\requestSolvers\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -71,13 +77,22 @@
     <Filter Include="Header Files\session">
       <UniqueIdentifier>{2b05c343-3b1c-4c83-a558-4ced5715acdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\hw">
+      <UniqueIdentifier>{067b76e7-3b2d-4a8c-81f9-f1c8b1127504}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hw">
+      <UniqueIdentifier>{bf57680f-ae6e-4119-b908-998f69ea831d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\requestSolvers\base">
+      <UniqueIdentifier>{e8356607-7851-42b7-babc-45748389ab83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\requestSolvers\base">
+      <UniqueIdentifier>{ee97b5db-a856-4267-b2a7-737bb17ae376}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ws_server.h">
       <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="request.h">
-      <Filter>Header Files\requestSolvers</Filter>
     </QtMoc>
     <QtMoc Include="PingRequest.h">
       <Filter>Header Files\requestSolvers</Filter>
@@ -90,9 +105,6 @@
     </QtMoc>
     <QtMoc Include="session.h">
       <Filter>Header Files\session</Filter>
-    </QtMoc>
-    <QtMoc Include="render.h">
-      <Filter>Header Files\requestSolvers</Filter>
     </QtMoc>
     <QtMoc Include="describeChannels.h">
       <Filter>Header Files\requestSolvers</Filter>
@@ -118,6 +130,18 @@
     <QtMoc Include="signalTransform.h">
       <Filter>Header Files\requestSolvers</Filter>
     </QtMoc>
+    <QtMoc Include="config.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="adc.h">
+      <Filter>Header Files\hw</Filter>
+    </QtMoc>
+    <QtMoc Include="render.h">
+      <Filter>Header Files\session</Filter>
+    </QtMoc>
+    <QtMoc Include="request.h">
+      <Filter>Header Files\requestSolvers\base</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.h">
@@ -126,5 +150,11 @@
     <ClInclude Include="errorCodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
   </ItemGroup>
 </Project>

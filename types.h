@@ -1,6 +1,5 @@
 #pragma once
 #include <QObject>
-#include "errorCodes.h"
 
 struct recording {
 	quint8 transformId;

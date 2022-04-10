@@ -5,6 +5,7 @@
 #include "types.h"
 #include "connection.h"
 #include "render.h"
+#include "adc.h"
 
 class request : public QObject
 {

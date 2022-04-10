@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "types.h"
+#include "const.h"
 
 class render : public QObject
 {
