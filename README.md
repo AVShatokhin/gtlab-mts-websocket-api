@@ -155,7 +155,7 @@ $defs:
         type: integer
         minimum: 0
         maximum: 255      
-      channelCount:
+      channelsCount:
         type: integer
         minimum: 0
         maximum: 255      
