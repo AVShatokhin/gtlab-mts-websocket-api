@@ -1,6 +1,6 @@
 #include "ws_server.h"
 
-ws_server::ws_server(config * conf, adc * adc): QObject(), _conf(conf), _adc(adc)
+ws_server::ws_server(config * conf, adc * adc): QObject(), _conf(conf)
 {
 		QWebSocketServer * _server = new QWebSocketServer("ws_server", QWebSocketServer::SslMode::NonSecureMode, this);
 		QObject::connect(_server, &QWebSocketServer::newConnection, [=]() 
@@ -10,7 +10,8 @@ ws_server::ws_server(config * conf, adc * adc): QObject(), _conf(conf), _adc(adc
 						new connection(
 							_server->nextPendingConnection()
 						)
-					)
+					),
+					adc
 				);
 
 				qDebug() << "New connection";
@@ -18,7 +19,7 @@ ws_server::ws_server(config * conf, adc * adc): QObject(), _conf(conf), _adc(adc
 		);
 		qDebug() << "listen() = " << _server->listen(QHostAddress::Any, conf->websocket_port);
 		qDebug() << "serverPort() = " << _server->serverPort();
-		qDebug() << "adc->init() = " << _adc->init();
+		//qDebug() << "adc->init() = " << adc->init();
 }
 
 ws_server::~ws_server()

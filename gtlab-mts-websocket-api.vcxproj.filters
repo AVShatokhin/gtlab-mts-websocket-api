@@ -53,6 +53,9 @@
     <ClCompile Include="request.cpp">
       <Filter>Source Files\requestSolvers\base</Filter>
     </ClCompile>
+    <ClCompile Include="ADCWatchdog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -141,6 +144,9 @@
     </QtMoc>
     <QtMoc Include="request.h">
       <Filter>Header Files\requestSolvers\base</Filter>
+    </QtMoc>
+    <QtMoc Include="ADCWatchdog.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

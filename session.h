@@ -19,7 +19,7 @@ class session : public QObject
 	Q_OBJECT
 
 public:
-	session(parser *);
+	session(parser *, adc *);
 	~session();
 private:
 	request * _router(command);
@@ -27,4 +27,5 @@ private:
 	QMap<quint8, request*> _requests;
 	bool _checkRequestId(command);
 	void _addRequest(command, request *);
+	adc* _adc;
 };

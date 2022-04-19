@@ -21,22 +21,21 @@ QString render::Ping(quint8 id)
 	return __response.toJson();
 }
 
-QString render::describeChannels(quint8 id, QList<channelInfo> * channels)
+QString render::describeChannels(quint8 id, ADC_state state)
 {
 
-	QJsonArray __channels;
-
-	for (int i = 0; i != channels->size(); i++) {
-		QJsonObject __channel;
-		__channel.insert("channelId", QJsonValue((int)channels->at(i).channelId));
-		__channels << __channel;
-	}
+	QJsonObject __result = { 	
+		{ "deviceStatus", state.deviceState },
+		{ "samplingRate", (int)(state.samplingRate)},
+		{ "deviceType", state.deviceType },
+		{ "channelsCount", state.channelsCount},
+	};
 
 	QJsonDocument __response = QJsonDocument();
 
 	__response.setObject({
 		{"id", id},
-		{"result", __channels }
+		{"result", __result }
 	});
 
 	return __response.toJson();

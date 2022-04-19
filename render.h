@@ -16,7 +16,7 @@ public:
 	~render();
 
 	static QString Ping(quint8 id);
-	static QString describeChannels(quint8 id, QList<channelInfo>*);
+	static QString describeChannels(quint8 id, ADC_state state);
 	static QString signalRecording_stop(quint8 id, int errorCode);
 	static QString plotter_stop(quint8 id, int errorCode);
 	static QString plotter_plot(quint8 id, int errorCode);

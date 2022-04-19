@@ -8,6 +8,8 @@
 #include "hw/gtl_device.h"
 #include "math/gtl_math_sum.h"
 
+#include <QTimer>
+
 #include "config.h"
 
 class adc : public QObject
@@ -19,8 +21,9 @@ public:
 	~adc();
 	bool init();
 	quint8 getADCStatus() { return _ADCStatus;  }
+	ADC_state getState();
 
-private:
+private:	
 	config* _conf;
 	quint8 _ADCStatus;	
 	gtl::hw::device* _device;

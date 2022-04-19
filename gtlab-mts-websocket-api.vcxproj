@@ -92,6 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ADCWatchdog.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="describeChannels.cpp" />
     <ClCompile Include="adc.cpp" />
@@ -133,6 +134,7 @@
     <QtMoc Include="plotter_start.h" />
     <QtMoc Include="plotter_stop.h" />
     <QtMoc Include="config.h" />
+    <QtMoc Include="ADCWatchdog.h" />
     <ClInclude Include="const.h" />
     <ClInclude Include="errorCodes.h" />
     <QtMoc Include="plotter_plot.h" />

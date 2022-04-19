@@ -35,9 +35,10 @@ struct command {
 
 };
 
-struct channelInfo {
-	quint32 channelId;
-	QString displayName;
+struct ADC_state {
+	QString deviceType;
+	quint8 deviceState;		
+	quint8 channelsCount;
 	quint32 samplingRate;
 };
 

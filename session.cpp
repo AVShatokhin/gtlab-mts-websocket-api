@@ -1,7 +1,7 @@
 #include "session.h"
 
-session::session(parser * par)
-	: QObject(), _parser(par)
+session::session(parser * par, adc * adc)
+	: QObject(), _parser(par), _adc(adc)
 {
 	_requests.clear();	
 
@@ -37,7 +37,7 @@ request * session::_router(command cmd)
 	}
 	else if (cmd.methodId == "signalRecording.describeChannels") {
 		// получение информации об аналоговых каналах АЦП
-		return (request *)(new describeChannels(cmd, _parser->getCurrentConnection()));
+		return (request *)(new describeChannels(cmd, _parser->getCurrentConnection(), _adc));
 	}
 	else if (cmd.methodId == "signalRecording.start") {
 		// начало записи сигнала с аналогового датчика		

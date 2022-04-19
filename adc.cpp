@@ -3,7 +3,7 @@
 adc::adc(config* conf, QObject* parent)
 	: QObject(parent), _conf(conf)
 {	
-	_ADCStatus = ADC_OK;
+	_ADCStatus = ADC_NOT_INITED;
 
 	gtl::hw::hw * __hw = new gtl::hw::hw(_conf->hw_plugins_dir);
 
@@ -27,15 +27,57 @@ adc::~adc()
 
 bool adc::init()
 {	
-	if (_device->start(_conf->id, _conf->rate)) {		
+	for (auto i = 0; i != _device->count_ai(); i++) {
+		_device->ai(i)->set_iepe(true);
+		_device->ai(i)->set_sensitivity(1);
+	}
+
+	if (_device->start(_conf->id, _conf->rate)) {
+		QObject::connect(_device, &gtl::hw::device::error, [=](QString, QString) { 
+			// не всегда мы получаем этот сигнал!
+			_ADCStatus = ADC_CRITICAL_FAULT;
+		});
+
+		_ADCStatus = ADC_OK;
 		return true;
 	}
 	else {
-		_ADCStatus = ADC_START_FAILED;
+		_ADCStatus = ADC_START_FAILED;		
 		return false;
 	}
-	
 }
+
+ADC_state adc::getState()
+{
+	ADC_state __state;	
+
+	__state.deviceState = _ADCStatus;
+	__state.deviceType = _conf->device;
+	__state.samplingRate = 0;
+	__state.channelsCount = 0;
+
+	if (_ADCStatus == ADC_OK) {
+		__state.samplingRate = _device->rate();
+		__state.channelsCount = _device->count_ai();
+	}
+
+	return __state;
+}
+
+
+
+//void adc::_longInit()
+//{
+//	QTimer* __timer = new QTimer(this);
+//	__timer->setInterval(1000);
+//	__timer->setSingleShot(true);
+//
+//	QObject::connect(__timer, &QTimer::timeout, [=] {
+//		qDebug() << "adc->init() = " << this->init();
+//	});
+//
+//	__timer->start();
+//}
 
 /*
 QStringList devices = hw.devices();
@@ -92,9 +134,6 @@ qDebug() << d->count_ai();*/
 //    {
 //        gtl::math::sum* sum;
 //
-//        //задаем параметры каналов.
-//        d->ai(0)->set_iepe(true);
-//        d->ai(0)->set_sensitivity(0.001);
 //
 //        //запускаем устройство. первый параметр - id, второй - частота дискретизации
 //        qDebug() << d->start("0", 128000);

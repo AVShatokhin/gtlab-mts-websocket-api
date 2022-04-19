@@ -14,5 +14,5 @@ public:
 	~ws_server();
 private:
 	config* _conf;
-	adc* _adc;
+
 };
