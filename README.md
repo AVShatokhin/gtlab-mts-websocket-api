@@ -119,7 +119,7 @@ properties: {}
 | :------------- | :--------------------------------------------- |
 | **Название**   | `signalRecording.describeChannels`             |
 | **Тип метода** | скалярный                                      |
-| **Описание**   | получение информации об аналоговых каналах АЦП |
+| **Описание**   | получение информации об АЦП                    |
 
 **Cхема запроса**:
 
@@ -133,37 +133,26 @@ properties: {}
 
 ```yaml
 type: object
-required: [channels]
+required: [deviceType, deviceStatus, channelsCount, samplingRate]
 additionalProperties: false
 properties:
-  channels:
-    type: array
-    items:
-      type:
-        $ref: "#/$defs/channel"
-$defs:
-  channel:
-    type: object
-    required: [device, displayName, samplingRate]
-    additionalProperties: false
-    properties:
-      deviceType:
-        type: string
-        maxLength: 255
-        description: тип устройства
-      deviceStatus:
-        type: integer
-        minimum: 0
-        maximum: 255      
-      channelsCount:
-        type: integer
-        minimum: 0
-        maximum: 255      
-      samplingRate:
-        type: integer
-        minimum: 0
-        maximum: 2147483647
-        description: частота дискретизации АЦП
+    deviceType:
+      type: string
+      maxLength: 255
+      description: тип устройства
+    deviceStatus:
+      type: integer
+      minimum: 0
+      maximum: 255      
+    channelsCount:
+      type: integer
+      minimum: 0
+      maximum: 255      
+    samplingRate:
+      type: integer
+      minimum: 0
+      maximum: 2147483647
+      description: частота дискретизации АЦП
 ```
 
 ## Возможные значения поля deviceStatus
