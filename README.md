@@ -197,30 +197,21 @@ $defs:
       channelId:
         type: integer
         minimum: 0
-        maximum: 32767
-        description: идентификатор канала, не может повторяться в одном запросе
+        maximum: 255
+        description: идентификатор канала, не может повторяться в одном запросе, соответствует номеру канала в АЦП
       gainMultiplier:
+        default: 1
         type: number
         minimum: 0
         maximum: 1
-        description: коэффициент усиления датчика
-      recordings:
-        type: array
-        item:
-          $ref: "#/$defs/recording"
-  recording:
-    type: object
-    additionalProperties: false
-    properties:
-      transformId:
+        description: коэффициент усиления датчика      
+      visualTransformType:
         default: null
         oneOf:
           - type: "null"
           - type: string
-            maxLength: 63
-            pattern: '^[a-z][A-Za-z]*$'
-        description: название трансформации, применяемой к сигналу
-      transformParams:
+        description: наименование преобразования сигнала для визуализации         
+      visualTransformParams:
         default: null
         oneOf:
           - type: "null"
@@ -231,8 +222,10 @@ $defs:
         oneOf:
           - type: "null"
           - type: string
-        description: путь для сохранения сигнала
+        description: путь для сохранения сигнала       
 ```
+* Если visualTransformType не задан, на визуализацию поступает сигнал без преобразований.
+* Если recordingPath не задан запись в файл не ведётся.
 
 **Схема ответа**:
 
