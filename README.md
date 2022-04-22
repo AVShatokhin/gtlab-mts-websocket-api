@@ -133,17 +133,13 @@ properties: {}
 
 ```yaml
 type: object
-required: [deviceType, deviceStatus, channelsCount, samplingRate]
+required: [deviceType, channelsCount, samplingRate]
 additionalProperties: false
 properties:
     deviceType:
       type: string
       maxLength: 255
       description: тип устройства
-    deviceStatus:
-      type: integer
-      minimum: 0
-      maximum: 255      
     channelsCount:
       type: integer
       minimum: 0
@@ -155,15 +151,7 @@ properties:
       description: частота дискретизации АЦП
 ```
 
-## Возможные значения поля deviceStatus
 
-| Код   | Название                    | Примечание                                                        |
-| :---- | :-------------------------- | ----------------------------------------------------------------- |
-|     0 | `ADC_OK`                    | АЦП работает                                                      |
-|     1 | `ADC_NOT_INITED`            | Начальное состояние инициализации                                 |
-|     2 | `ADC_PLUGIN_NOT_FOUND`      | Нет плагина для работы с выбранным типом АЦП                      |
-|     3 | `ADC_ERROR_CREATING_DEVICE` | Ошибка создания логического устройства                            |
-|     4 | `ADC_START_FAILED`          | Ошибка инициализации устройства                                   |
 
 ### Старт записи аналогового сигнала
 
