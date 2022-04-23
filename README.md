@@ -173,12 +173,12 @@ properties:
     minimum: 0
     maximum: 255
     description: идентификатор записи сигнала
-  measurementsFrame:
+  visualFrameSize:
     type: integer
     minimum: 0
     maximum: 32767
     description: количество точек возвращаемых в одном ответе
-  frameIntervalMillis:
+  visualIntervalMillis:
     type: integer
     minimum: 0
     maximum: 32767
@@ -226,6 +226,7 @@ $defs:
 ```
 * Если visualTransformType не задан, на визуализацию поступает сигнал без преобразований.
 * Если recordingPath не задан запись в файл не ведётся.
+* Всё, что с приставкой visual, то управляет процессом визуализации.
 
 **Схема ответа**:
 
