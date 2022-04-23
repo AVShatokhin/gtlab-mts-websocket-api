@@ -22,9 +22,11 @@ public:
 	bool init();
 	quint8 getADCStatus() { return _ADCStatus;  }
 	ADC_state getState();
+	gtl::hw::device* getDevice() { return _device; }
 
 private:	
 	config* _conf;
 	quint8 _ADCStatus;	
 	gtl::hw::device* _device;
+	QMetaObject::Connection _connStatusChanged;
 };

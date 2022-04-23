@@ -7,6 +7,7 @@
 #include "render.h"
 #include "adc.h"
 
+
 class request : public QObject
 {
 	Q_OBJECT

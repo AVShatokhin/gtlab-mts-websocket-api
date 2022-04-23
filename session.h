@@ -28,4 +28,6 @@ private:
 	bool _checkRequestId(command);
 	void _addRequest(command, request *);
 	adc* _adc;
+signals:
+	void stopAll();
 };

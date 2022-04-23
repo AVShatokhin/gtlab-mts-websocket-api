@@ -110,6 +110,7 @@
     <ClCompile Include="signalRecording_start.cpp" />
     <ClCompile Include="signalRecording_stop.cpp" />
     <ClCompile Include="signalTransform.cpp" />
+    <ClCompile Include="visualQueue.cpp" />
     <ClCompile Include="ws_server.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +126,7 @@
     <QtMoc Include="session.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="visualQueue.h" />
     <QtMoc Include="describeChannels.h" />
     <QtMoc Include="render.h" />
     <QtMoc Include="PingRequest.h" />

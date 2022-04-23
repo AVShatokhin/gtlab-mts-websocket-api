@@ -23,22 +23,74 @@ QString render::Ping(quint8 id)
 
 QString render::describeChannels(quint8 id, ADC_state state)
 {
+	QJsonDocument __response = QJsonDocument();
 
-	QJsonObject __result = { 	
-		{ "deviceStatus", state.deviceState },
-		{ "samplingRate", (int)(state.samplingRate)},
-		{ "deviceType", state.deviceType },
-		{ "channelsCount", state.channelsCount},
-	};
+	if (state.deviceState > 0) {
+		QJsonObject __error = {
+			{ "code", ADC_FAIL },
+			{ "extra", "Failed ADC state: " + QString::number(state.deviceState)},
+		};
+
+		__response.setObject({
+			{"id", id},
+			{"error", __error }
+		});
+	}
+	else {
+		QJsonObject __result = {			
+			{ "samplingRate", (int)(state.samplingRate)},
+			{ "deviceType", state.deviceType },
+			{ "channelsCount", state.channelsCount},
+		};
+
+		__response.setObject({
+			{"id", id},
+			{"result", __result }
+			});
+	}
+
+	return __response.toJson();
+}
+
+QString render::signalRecording_start(quint8 id, int errorCode, QList<visualQueue*>* _listQueue)
+{
+	QJsonObject __result = QJsonObject();
+	
+	for (auto it = _listQueue->begin(); it != _listQueue->end(); it++) {
+		QList<qreal> __dataTosend = ((visualQueue*)(*it))->get_data();
+
+		//qDebug() << "Data to send: " << __dataTosend.size() << " values";
+		
+		QJsonArray __data = QJsonArray();
+		
+		for (auto it = __dataTosend.begin(); it != __dataTosend.end(); it++) {
+			//qDebug() << "value = " << *it;
+			__data.append(QString::number(* it, (char)103, 10));
+		}
+
+		__result.insert(QString::number(((visualQueue*)(*it))->get_channelId()), __data);
+	}
 
 	QJsonDocument __response = QJsonDocument();
 
-	__response.setObject({
-		{"id", id},
-		{"result", __result }
-	});
+	if (errorCode > 0) {
+		QJsonObject __error = { { "code", errorCode} };
 
-	return __response.toJson();
+		__response.setObject({
+			{"id", id},
+			{"result", QJsonObject()},
+			{"error", __error}
+			});
+
+	}
+	else {
+		__response.setObject({
+			{"id", id},
+			{"result", __result}
+			});
+	}
+
+	return __response.toJson();	
 }
 
 QString render::signalRecording_stop(quint8 id, int errorCode)
@@ -266,4 +318,5 @@ QString render::ERROR_JSONParseFailed(QString error)
 
 	return __response.toJson();
 }
+
 

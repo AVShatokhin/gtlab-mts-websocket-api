@@ -17,7 +17,10 @@ session::session(parser * par, adc * adc)
 	QObject::connect(par, &parser::disconnected, [=] {
 		qDebug() << "Session closed";
 
-		while (!_requests.empty()) {
+		emit stopAll(); // тушим потоковые реквесты
+
+		while (!_requests.empty()) { 
+			// тушим те запросы которые остались (вдруг скал€рные какие-то есть) и они сами себ€ удал€ют из списка
 			_requests.begin().value()->stop();
 		}
 
@@ -36,12 +39,16 @@ request * session::_router(command cmd)
 		return (request *)(new PingRequest(cmd, _parser->getCurrentConnection()));
 	}
 	else if (cmd.methodId == "signalRecording.describeChannels") {
-		// получение информации об аналоговых каналах ј÷ѕ
+		// получение информации об аналоговых каналах ј÷ѕ		
 		return (request *)(new describeChannels(cmd, _parser->getCurrentConnection(), _adc));
 	}
 	else if (cmd.methodId == "signalRecording.start") {
-		// начало записи сигнала с аналогового датчика		
-		return (request*)(new signalRecording_start(cmd, _parser->getCurrentConnection()));
+		// начало записи сигнала с аналогового датчика
+		// все потоковые запросы, которые подразумевают длительную работу 
+		// и могут быть прерваны дисконнектом следует св€зать сигналом stopAll
+		signalRecording_start * __req = new signalRecording_start(cmd, _parser->getCurrentConnection(), _adc);
+		QObject::connect(this, &session::stopAll, __req, &signalRecording_start::stop);
+		return (request*)(__req);
 	} 
 	else if (cmd.methodId == "signalRecording.stop") {
 		// сигнал об окончании записи
@@ -80,7 +87,8 @@ void session::_addRequest(command cmd, request * req)
 {
 	_requests.insert(cmd.id, req);
 	QObject::connect(req, &request::requestCompleted, [=] {
-		_requests.remove(cmd.id);		
+		_requests.remove(cmd.id);				
 	});
+
 	req->start();
 }

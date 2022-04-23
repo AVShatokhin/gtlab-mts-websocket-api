@@ -33,12 +33,22 @@ bool adc::init()
 	}
 
 	if (_device->start(_conf->id, _conf->rate)) {
-		QObject::connect(_device, &gtl::hw::device::error, [=](QString, QString) { 
-			// не всегда мы получаем этот сигнал!
-			_ADCStatus = ADC_CRITICAL_FAULT;
+		_connStatusChanged = QObject::connect(_device, &gtl::hw::device::status_changed, [=](int state) {
+			// если АЦП отключено сигнал приходит раз в секунду
+			qDebug() << "Device status changed: " << state;
+
+			if ((state == 0) or (state == 3)) { // undef | failed
+				// todo:
+				// Выкидывать сигнал при сбое АЦП и принимать его в потоковых методах, работающих непосредственно с АЦП.
+				// хотя это не обязательно, им достаточно контроллировать переменную state!
+
+				_ADCStatus = ADC_CRITICAL_FAULT;
+				QObject::disconnect(_connStatusChanged);
+			}
 		});
 
 		_ADCStatus = ADC_OK;
+
 		return true;
 	}
 	else {

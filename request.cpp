@@ -1,9 +1,9 @@
 #include "request.h"
 
+
 request::request(command cmd, connection * con)
 	: QObject(), _cmd(cmd), _connection(con)
-{
-
+{	
 }
 
 request::~request()

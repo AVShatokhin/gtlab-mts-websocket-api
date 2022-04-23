@@ -1,16 +1,13 @@
 #pragma once
 #include <QObject>
 
-struct recording {
-	quint8 transformId;
-	QString transformParams; // TBD
-	QString recordingPath;
-};
 
 struct channelRecord {
 	quint32 channelId;
 	double gainMultiplier;
-	QList<recording> recordings;
+	QString recordingPath;
+	QString visualTransformType;
+	QString visualTransformParams; // TBD
 };
 
 struct command {
@@ -19,8 +16,8 @@ struct command {
 
 	// signalRecording.start
 	quint8 recordingId;
-	quint16 measurementsFrame;
-	quint16 frameIntervalMillis;
+	quint16 visualFrameSize;
+	quint16 visualIntervalMillis;
 	QList<channelRecord> channels;
 
 	// plotter.start

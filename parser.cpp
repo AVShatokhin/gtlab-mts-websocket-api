@@ -58,9 +58,14 @@ void parser::parse(QString message)
 
 void parser::parse_signalRecordingStart(command* newCommand, QJsonObject* properties)
 {
-	newCommand->recordingId = properties->value("recordingId").toInt(0);
-	newCommand->measurementsFrame = properties->value("measurementsFrame").toInt(0);
-	newCommand->frameIntervalMillis = properties->value("frameIntervalMillis").toInt(0);
+	newCommand->recordingId = properties->value("recordingId").toInt(1);
+	newCommand->visualFrameSize = properties->value("visualFrameSize").toInt(1);
+	newCommand->visualIntervalMillis = properties->value("visualIntervalMillis").toInt(1000);
+	// todo:
+	// надо выкинуть ошибку если эти параметры:
+	// visualIntervalMillis < 100мс
+	// visualFrameSize < 1
+
 	if (properties->value("channels").isArray()) {
 		QJsonArray __channels = properties->value("channels").toArray();
 		for (auto i = __channels.begin(); i != __channels.end(); i++) {
@@ -69,7 +74,10 @@ void parser::parse_signalRecordingStart(command* newCommand, QJsonObject* proper
 				QJsonObject __channelItem = i->toObject();
 				__channel.channelId = __channelItem.value("channelId").toInt();
 				__channel.gainMultiplier = __channelItem.value("gainMultiplier").toDouble();
-				if (__channelItem.value("recordings").isArray()) {
+				__channel.visualTransformType = __channelItem.value("visualTransformType").toString("");
+				__channel.recordingPath = __channelItem.value("recordingPath").toString("");
+
+				/* if (__channelItem.value("recordings").isArray()) {
 					QJsonArray __recordings = __channelItem.value("recordings").toArray();
 					for (auto j = __recordings.begin(); j != __recordings.end(); j++) {
 						recording __recording;
@@ -78,7 +86,7 @@ void parser::parse_signalRecordingStart(command* newCommand, QJsonObject* proper
 						__recording.transformId = __recordingItem.value("transformId").toInt();
 						__channel.recordings.append(__recording);
 					}
-				}
+				}*/
 				newCommand->channels.append(__channel);
 			}
 		}
