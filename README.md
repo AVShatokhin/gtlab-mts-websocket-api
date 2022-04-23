@@ -119,7 +119,7 @@ properties: {}
 | :------------- | :--------------------------------------------- |
 | **Название**   | `signalRecording.describeChannels`             |
 | **Тип метода** | скалярный                                      |
-| **Описание**   | получение информации об аналоговых каналах АЦП |
+| **Описание**   | получение информации об АЦП                    |
 
 **Cхема запроса**:
 
@@ -133,48 +133,25 @@ properties: {}
 
 ```yaml
 type: object
-required: [channels]
+required: [deviceType, channelsCount, samplingRate]
 additionalProperties: false
 properties:
-  channels:
-    type: array
-    items:
-      type:
-        $ref: "#/$defs/channel"
-$defs:
-  channel:
-    type: object
-    required: [device, displayName, samplingRate]
-    additionalProperties: false
-    properties:
-      deviceType:
-        type: string
-        maxLength: 255
-        description: тип устройства
-      deviceStatus:
-        type: integer
-        minimum: 0
-        maximum: 255      
-      channelsCount:
-        type: integer
-        minimum: 0
-        maximum: 255      
-      samplingRate:
-        type: integer
-        minimum: 0
-        maximum: 2147483647
-        description: частота дискретизации АЦП
+    deviceType:
+      type: string
+      maxLength: 255
+      description: тип устройства
+    channelsCount:
+      type: integer
+      minimum: 0
+      maximum: 255      
+    samplingRate:
+      type: integer
+      minimum: 0
+      maximum: 2147483647
+      description: частота дискретизации АЦП
 ```
 
-## Возможные значения поля deviceStatus
 
-| Код   | Название                    | Примечание                                                        |
-| :---- | :-------------------------- | ----------------------------------------------------------------- |
-|     0 | `ADC_OK`                    | АЦП работает                                                      |
-|     1 | `ADC_NOT_INITED`            | Начальное состояние инициализации                                 |
-|     2 | `ADC_PLUGIN_NOT_FOUND`      | Нет плагина для работы с выбранным типом АЦП                      |
-|     3 | `ADC_ERROR_CREATING_DEVICE` | Ошибка создания логического устройства                            |
-|     4 | `ADC_START_FAILED`          | Ошибка инициализации устройства                                   |
 
 ### Старт записи аналогового сигнала
 
@@ -196,12 +173,12 @@ properties:
     minimum: 0
     maximum: 255
     description: идентификатор записи сигнала
-  measurementsFrame:
+  visualFrameSize:
     type: integer
     minimum: 0
     maximum: 32767
     description: количество точек возвращаемых в одном ответе
-  frameIntervalMillis:
+  visualIntervalMillis:
     type: integer
     minimum: 0
     maximum: 32767
@@ -220,30 +197,21 @@ $defs:
       channelId:
         type: integer
         minimum: 0
-        maximum: 32767
-        description: идентификатор канала, не может повторяться в одном запросе
+        maximum: 255
+        description: идентификатор канала, не может повторяться в одном запросе, соответствует номеру канала в АЦП
       gainMultiplier:
+        default: 1
         type: number
         minimum: 0
         maximum: 1
-        description: коэффициент усиления датчика
-      recordings:
-        type: array
-        item:
-          $ref: "#/$defs/recording"
-  recording:
-    type: object
-    additionalProperties: false
-    properties:
-      transformId:
+        description: коэффициент усиления датчика      
+      visualTransformType:
         default: null
         oneOf:
           - type: "null"
           - type: string
-            maxLength: 63
-            pattern: '^[a-z][A-Za-z]*$'
-        description: название трансформации, применяемой к сигналу
-      transformParams:
+        description: наименование преобразования сигнала для визуализации         
+      visualTransformParams:
         default: null
         oneOf:
           - type: "null"
@@ -254,8 +222,11 @@ $defs:
         oneOf:
           - type: "null"
           - type: string
-        description: путь для сохранения сигнала
+        description: путь для сохранения сигнала       
 ```
+* Если visualTransformType не задан, на визуализацию поступает сигнал без преобразований.
+* Если recordingPath не задан запись в файл не ведётся.
+* Всё, что с приставкой visual, то управляет процессом визуализации.
 
 **Схема ответа**:
 
