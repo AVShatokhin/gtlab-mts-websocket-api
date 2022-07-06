@@ -1,18 +1,11 @@
 #include "visualQueue.h"
 
-visualQueue::visualQueue(gtl::analog_data* data, int size, int channelId)
-	: QObject(), _data(data), _headPointer(0), _size(size), _channelId(channelId)
+visualQueue::visualQueue(gtl::analog_data* data, int pointsCount, int rmsPointsCount, int channelId)
+	: QObject(), 
+	_data(data), _pointsCount(pointsCount), _channelId(channelId), _rmsPointsCount(rmsPointsCount),
+	_currentSumm(0), _currentRmsPointsCount(0), _localData(new QList<qreal>), _isReady(false)
 {
 	QObject::connect(_data, &gtl::analog_data::data_changed, this, &visualQueue::_data_changed);
-
-	_localData = new QList<qreal>;
-
-	for (int i = 0; i < _size; i++) {
-		// инициализация хранилки
-		_localData->append(0);
-	}
-
-
 }
 
 visualQueue::~visualQueue()
@@ -27,30 +20,36 @@ void visualQueue::stop()
 
 QList<qreal> visualQueue::get_data()
 {
-	QList<qreal> __temp = QList<qreal>();
+	QList<qreal> __temp = *_localData;
+	_localData->clear();
+	_isReady = false;
+	return __temp;
+}
 
-	int __head = _headPointer;
+void visualQueue::_calcIncome(qreal data)
+{
+	_currentSumm += data;
+	_currentRmsPointsCount++;
 
-	for (int i = 0; i < _localData->size(); i++) {
-		__temp.append(_localData->at(__head));
-		__head++;
-		if (__head == _size) {
-			__head = 0;
-		}
+	if (_currentRmsPointsCount == _rmsPointsCount) {
+		qreal __finalValue = _currentSumm / _rmsPointsCount;
+		_localData->push_back(__finalValue);
+		_currentSumm = 0;
+		_currentRmsPointsCount = 0;		
 	}
 
-	return __temp;
+	if (_localData->size() == _pointsCount) {
+		_isReady = true;
+		emit ready();
+	}
 }
 
 void visualQueue::_data_changed()
 {
 	std::vector<qreal> data;
 	_data->get_data(std::back_inserter(data));
+	
 	for (auto it = data.begin(); it != data.end(); it++) {
-		_localData->replace(_headPointer, *it);
-		_headPointer++;		
-		if (_headPointer == _size) {
-			_headPointer = 0;
-		}
-	}
+		_calcIncome(*it);
+	}	
 }

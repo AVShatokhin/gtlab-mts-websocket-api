@@ -18,4 +18,5 @@ public:
 private: 
 	adc* _adc;
 	QList<visualQueue*> _listQueue;
+	
 };

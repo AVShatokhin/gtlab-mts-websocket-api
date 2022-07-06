@@ -54,8 +54,15 @@ QString render::describeChannels(quint8 id, ADC_state state)
 
 QString render::signalRecording_start(quint8 id, int errorCode, QList<visualQueue*>* _listQueue)
 {
+	// TODO:
+	// добавить нормальный рендер ошибки
+
 	QJsonObject __result = QJsonObject();
 	
+	for (auto it = _listQueue->begin(); it != _listQueue->end(); it++) {
+		if (((visualQueue*)(*it))->isReady() == false) return QString("");
+	}
+		
 	for (auto it = _listQueue->begin(); it != _listQueue->end(); it++) {
 		QList<qreal> __dataTosend = ((visualQueue*)(*it))->get_data();
 

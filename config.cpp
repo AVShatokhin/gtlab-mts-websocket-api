@@ -4,7 +4,7 @@ config::config(QString fileName, QObject *parent)
 	: QObject(parent), rate(DEFAULT_RATE), id(DEFAULT_ID), device(DEFAULT_DEVICE), websocket_port(DEFAULT_WEBSOCKET_PORT)
 {
 	#ifdef DEBUG
-		QString __path = "d:/projects/gtlab-mts-websocket-api/";
+		QString __path = "";
 	#else
 		QString __path = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).front();
 	#endif

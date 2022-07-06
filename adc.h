@@ -23,6 +23,7 @@ public:
 	quint8 getADCStatus() { return _ADCStatus;  }
 	ADC_state getState();
 	gtl::hw::device* getDevice() { return _device; }
+	config* getConfig() { return _conf; }
 
 private:	
 	config* _conf;
