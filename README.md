@@ -1,11 +1,20 @@
 # gtlab-mts-websocket-api
+
 Реализация WEBSOCKET-API между UI (by МТС) и BACK-END (by GTLAB.Диагностика)
 
-# Докоментация по API
+Обмен сообщениями происходит через WebSocket, сообщения кодируются в JSON и должны соответствовать следующим схемам. Схемы представлены в формате [JSONSchema](https://json-schema.org/understanding-json-schema/index.html).
+
+## Строка подключения
+
+Строка подключения к серверу имеет следующий формат: `ws://${HOST}:${PORT}/api/v${VERSION}`, где
+
+* `${HOST}` -- имя хоста сервера
+* `${PORT}` -- порт сервера
+* `${VERSION}` -- версия API сервера
+
+при попытке открыть соединение с неподдерживаемой версией протокола сервер должен закрыть соединение с кодом [`QWebSocketProtocol::CloseCodeDatatypeNotSupported`](https://doc.qt.io/qt-6/qwebsocketprotocol.html#CloseCode-enum)
 
 ## Схема сообщения
-
-Обмен сообщениями происходит через WebSocket, сообщения кодируются в JSON и должны соответствовать следующим схемам. Схемы представлены в формате [JSONSchema](https://json-schema.org/understanding-json-schema/index.html).
 
 ### Схема запроса
 
@@ -13,13 +22,9 @@
 
 ```yaml
 type: object
-required: [version, id, methodId, params]
+required: [id, methodId, params]
 additionalProperties: false
 properties:
-  version:
-    type: string
-    maxLength: 63
-    description: строка с версией протокола, нужна чтобы сервер мог проверить совместимость клиента с собой
   methodId:
     type: string
     pattern: '^[a-z][.a-zA-Z0-9]*$'
@@ -29,7 +34,10 @@ properties:
     type: integer
     minimum: 0
     maximum: 255
-    description: идентификатор запроса, могут повторяться в одной сессии; не может существовать 2 активных запроса (сервер еще отправил все ответы); лимит значений id нужен для ограничения числа одновременных запросов 
+    description: >-
+      идентификатор запроса, могут повторяться в одной сессии;
+      не может существовать 2 активных запроса (сервер еще отправил все ответы);
+      лимит значений id нужен для ограничения числа одновременных запросов 
   params:
     type: object
     propertyNames:
@@ -115,11 +123,11 @@ properties: {}
 
 ### Методы работы с АЦП
 
-|                |                                                |
-| :------------- | :--------------------------------------------- |
-| **Название**   | `signalRecording.describeChannels`             |
-| **Тип метода** | скалярный                                      |
-| **Описание**   | получение информации об АЦП                    |
+|                |                                    |
+| :------------- | :--------------------------------- |
+| **Название**   | `signalRecording.describeChannels` |
+| **Тип метода** | скалярный                          |
+| **Описание**   | получение информации об АЦП        |
 
 **Cхема запроса**:
 
@@ -136,22 +144,20 @@ type: object
 required: [deviceType, channelsCount, samplingRate]
 additionalProperties: false
 properties:
-    deviceType:
-      type: string
-      maxLength: 255
-      description: тип устройства
-    channelsCount:
-      type: integer
-      minimum: 0
-      maximum: 255      
-    samplingRate:
-      type: integer
-      minimum: 0
-      maximum: 2147483647
-      description: частота дискретизации АЦП
+  deviceType:
+    type: string
+    maxLength: 255
+    description: тип устройства
+  channelsCount:
+    type: integer
+    minimum: 0
+    maximum: 255      
+  samplingRate:
+    type: integer
+    minimum: 0
+    maximum: 2147483647
+    description: частота дискретизации АЦП
 ```
-
-
 
 ### Старт записи аналогового сигнала
 
@@ -161,11 +167,18 @@ properties:
 | **Тип метода** | потоковый                                   |
 | **Описание**   | начало записи сигнала с аналогового датчика |
 
+Начинает запись сигнала с датчиков по указанным каналам. Для каждого канала указывается коэффициент усиления и, опционально, идентификатор для сохранения записи. Дополнительно сигнал может передаваться в клиент для визуализации.
+
+Сигнал преобразуется в двух местах перед передачей клиенту
+
+1. В `channels.[*].visualTransformType`, `channels.[*].visualTransformParams` задаются несжимающие трансформации, позволяющие вычислять производные характеристки сигнала (например: прямой спектр)
+2. В `visual.rollupStrategy`, `visual.rollupFrameSize`, `visual.rollupParams` задаются параметры свертки сигнала (здесь под сверткой подразумевается уменьшение числа точек, по которым строится визуализация сигнала).
+
 **Схема запроса**:
 
 ```yaml
 type: object
-required: [channels, frameIntervalMillis]
+required: [channels, visual]
 additionalProperties: false
 properties:
   recordingId:
@@ -173,22 +186,43 @@ properties:
     minimum: 0
     maximum: 255
     description: идентификатор записи сигнала
-  visualFrameSize:
-    type: integer
-    minimum: 0
-    maximum: 32767
-    description: количество точек возвращаемых в одном ответе
-  visualIntervalMillis:
-    type: integer
-    minimum: 0
-    maximum: 32767
-    description: интервал между ответами в миллисекундах
+  visual:
+    default: null
+    oneOf:
+      - type: "null"
+      - $ref: "#/$defs/visual"
+    description: настройки передачи сигнала для визуализации, если не указан или `null`, то данные для визуализации не передаются
   channels:
     type: array
     item:
       $ref: "#/$defs/channel"
     description: список каналов, с которых ведется запись
 $defs:
+  visual:
+    type: object
+    required: [intervalMillis]
+    properties:
+      intervalMillis:
+        type: integer
+        minimum: 0
+        maximum: 10000
+        description: интервал между ответами в миллисекундах
+      rollupStrategy:
+        default: null
+        oneOf:
+          - type: "null"
+          - type: string
+            pattern: '^[a-z][.a-zA-Z0-9]*$'
+            maxLength: 63
+        description: название алгоритма сжатия графика
+      rollupParams:
+        default: null
+        oneOf:
+          - type: "null"
+          - type: object
+            propertyNames:
+              pattern: '^[a-z][.a-zA-Z0-9]*$'
+        description: опциональные параметры свертки графика
   channel:
     type: object
     required: [channelId]
@@ -199,6 +233,14 @@ $defs:
         minimum: 0
         maximum: 255
         description: идентификатор канала, не может повторяться в одном запросе, соответствует номеру канала в АЦП
+      recordingDataId:
+        default: null
+        oneOf:
+          - type: "null"
+          - type: string
+            maxLength: 63
+            pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+        description: глобально уникальный идентификатор записанного сигнала (маппится на файл в папке)
       gainMultiplier:
         default: 1
         type: number
@@ -217,13 +259,8 @@ $defs:
           - type: "null"
           - type: object
         description: параметры трансформации
-      recordingPath:
-        default: null
-        oneOf:
-          - type: "null"
-          - type: string
-        description: путь для сохранения сигнала       
 ```
+
 * Если visualTransformType не задан, на визуализацию поступает сигнал без преобразований.
 * Если recordingPath не задан запись в файл не ведётся.
 * Всё, что с приставкой visual, то управляет процессом визуализации.
@@ -276,7 +313,14 @@ properties:
 ```yaml
 type: object
 additionalProperties: false
-properties: {}
+properties:
+  recordingSizeBytes:
+    default: null
+    oneOf:
+      - type: "null"
+      - type: integer
+        minimum: 0
+    description: размер файла с записанным сигналом, если файл не сохранялся, то `null`
 ```
 
 #### Коды ошибок
@@ -302,9 +346,27 @@ type: object
 required: [path]
 additionalProperties: false
 properties:
-  path:
+  dataId:
     type: string
-    description: путь к файлу с записанным сигналом
+    maxLength: 63
+    pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+    description: идентификатор записанного сигнала
+  rollupStrategy:
+    default: null
+    oneOf:
+      - type: "null"
+      - type: string
+        pattern: '^[a-z][.a-zA-Z0-9]*$'
+        maxLength: 63
+    description: название алгоритма сжатия графика
+  rollupParams:
+    default: null
+    oneOf:
+      - type: "null"
+      - type: object
+        propertyNames:
+          pattern: '^[a-z][.a-zA-Z0-9]*$'
+    description: опциональные параметры свертки графика
 ```
 
 **Схема ответа**:
@@ -446,38 +508,105 @@ $defs:
       type: number
 ```
 
-### Преобразование сигнала
+### Управление записанными сигналами
 
-|                |                                           |
-| :------------- | :---------------------------------------- |
-| **Название**   | `signalTransform`                         |
-| **Тип метода** | скалярный                                 |
-| **Описание**   | выполняем преобразование файла с сигналом |
+|                |                                       |
+| :------------- | :------------------------------------ |
+| **Название**   | `signalData.list`                     |
+| **Тип метода** | потоковый                             |
+| **Описание**   | перечисление всех записанных сигналов |
 
 **Схема запроса**:
 
 ```yaml
 type: object
-required: [sourcePath, destinationPath, kind]
 additionalProperties: false
 properties:
-  sourcePath:
-    type: string
-    description: путь к файлу с записанным сигналом
-  destinationPath:
-    type: string
-    description: путь сохранения преобразованного сигнала
-  transformId:
-    type: string
-    maxLength: 63
-    pattern: '^[a-z][A-Za-z]*$'
-    description: название трансформации
-  transformParams:
+  dataIdPattern:
     default: null
     oneOf:
       - type: "null"
-      - type: object
-    description: параметры трансформации
+      - type: string
+    description: регулярное выражение для фильтра записей
+```
+
+**Схема ответа**:
+
+```yaml
+type: object
+additionalProperties: false
+required: [dataId, sizeBytes, creationDateTime, modificationDateTime]
+properties:
+  dataId:
+    type: string
+    maxLength: 63
+    pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+    description: идентификатор записанного сигнала
+  sizeBytes:
+    type: integer
+    minimum: 0
+    description: размер файла
+  creationDateTime:
+    type: string
+    format: date-time
+    description: время создания
+  modificationDateTime:
+    type: string
+    format: date-time
+    description: время модификации
+```
+
+|                |                           |
+| :------------- | :------------------------ |
+| **Название**   | `signalData.read`         |
+| **Тип метода** | потоковый                 |
+| **Описание**   | отправка файла с сигналом |
+
+**Схема запроса**:
+
+```yaml
+type: object
+additionalProperties: false
+required: [dataId]
+properties:
+  dataId:
+    type: string
+    maxLength: 63
+    pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+    description: идентификатор записанного сигнала
+```
+
+**Схема ответа**:
+
+```yaml
+type: object
+additionalProperties: false
+required: [chunk]
+properties:
+  chunk:
+    type: string
+    pattern: '[^-A-Za-z0-9+/=]|=[^=]|={3,}$'
+    description: порция файла, закодированная в Base64
+```
+
+|                |                           |
+| :------------- | :------------------------ |
+| **Название**   | `signalData.remove`       |
+| **Тип метода** | скалярный                 |
+| **Описание**   | удаление файла с сигналом |
+
+**Схема запроса**:
+
+```yaml
+type: object
+additionalProperties: false
+required: [dataId]
+properties:
+  dataId:
+    type: string
+    maxLength: 63
+    pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+    description: идентификатор записанного сигнала
 ```
 
 **Схема ответа**:
@@ -488,6 +617,60 @@ additionalProperties: false
 properties: {}
 ```
 
-#### Конкретные преобразования
+|                |                                           |
+| :------------- | :---------------------------------------- |
+| **Название**   | `signalData.transform`                    |
+| **Тип метода** | скалярный                                 |
+| **Описание**   | выполняем преобразование файла с сигналом |
+
+**Схема запроса**:
+
+```yaml
+type: object
+required: [sourceDataId, destinationDataId, transformId]
+additionalProperties: false
+properties:
+  sourceDataId:
+    type: string
+    maxLength: 63
+    pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+    description: идентификатор записанного сигнала
+  destinationDataId:
+    type: string
+    maxLength: 63
+    pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+    description: идентификатор сохранения преобразованного сигнала
+  transformId:
+    type: string
+    maxLength: 63
+    pattern: '^[a-zA-Z][A-Za-z0-9]*$'
+    description: название трансформации
+  transformParams:
+    default: null
+    oneOf:
+      - type: "null"
+      - type: object
+        propertyNames:
+          pattern: '^[a-z][.a-zA-Z0-9]*$'
+    description: параметры трансформации
+```
+
+**Схема ответа**:
+
+```yaml
+type: object
+additionalProperties: false
+properties:
+  destinationSizeBytes:
+    type: integer
+    minimum: 0
+    description: размер файла с записанным сигналом
+```
+
+## Алгоритмы свертки
+
+TODO
+
+## Алгоритмы преобразования сигнала
 
 Здесь будет список возможных преобразований с параметрами.
